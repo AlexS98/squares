@@ -23,6 +23,16 @@
   color: #61dafb;
 }
 
+.square{
+  height: 100px;
+  width: 100px;
+  border: 4px double black ;
+}
+
+.active{
+  background-color: aqua;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
