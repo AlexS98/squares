@@ -7,6 +7,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.square{
+  height: 100px;
+  width: 100px;
+  border: 4px double black ;
+}
+
+.active{
+  background-color: aqua;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
