@@ -8,12 +8,13 @@ export interface SquareProps {
     isActive?: boolean;
 }
 
-const Square : React.FC < SquareProps > = (props) => {
+const Square: React.FC<SquareProps> = (props) => {
     return (
         <div id={props.name}
-            style={{ backgroundColor: props.color }}>
+            style={{ backgroundColor: props.color }}
+            className={"square"}>
         </div>
-    );
+    )
 };
 
 export default Square;
