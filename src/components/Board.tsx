@@ -3,7 +3,13 @@ import Square from './Square';
 import { SquareProps } from './Square';
 
 interface BoardState {
-    squares: SquareProps[]
+    squares: SquareProps[],
+    lastCoords: MousePosition
+}
+
+export interface MousePosition {
+    X: number;
+    Y: number;
 }
 
 class Board extends React.Component<{}, BoardState>{
@@ -23,13 +29,14 @@ class Board extends React.Component<{}, BoardState>{
                 color: "green",
                 isActive: false
             }
-        ]
+        ],
+        lastCoords: { X: 0, Y: 0 }
     };
 
-    componentDidMount = () => {
+    setSquares = () => {
         const squares: SquareProps[] = this.state.squares.slice();
         squares.forEach(e => {
-            const el:any = document.getElementById(e.name);
+            const el: any = document.getElementById(e.name);
             if (el) {
                 el.style.left = e.xPos + 'px';
                 el.style.top = e.yPos + 'px';
@@ -37,30 +44,57 @@ class Board extends React.Component<{}, BoardState>{
         });
     }
 
+    componentDidMount = () => {
+        this.setSquares();
+    }
+
+    componentDidUpdate = () => {
+        this.setSquares();
+    }
+
     createSquares = () => {
         let squares: any[] = [];
         this.state.squares.forEach(e => {
-            squares.push(<Square key={e.name} xPos={e.xPos} yPos={e.yPos} name={e.name} color={e.color} />)
+            squares.push(<Square key={e.name} xPos={e.xPos} yPos={e.yPos} name={e.name} color={e.color} isActive={e.isActive} />)
         });
         return squares;
     }
 
-    onDown = () => {
+    onDown = (e: { clientX: number, clientY: number }) => {
         const squares: SquareProps[] = this.state.squares.slice();
-        squares.forEach(e => {
-
+        const mouse: MousePosition = { X: e.clientX, Y: e.clientY };
+        squares.forEach(el => {
+            el.isActive = !el.isActive &&
+                mouse.X >= el.xPos &&
+                mouse.X <= el.xPos + 100 &&
+                mouse.Y >= el.yPos &&
+                mouse.Y <= el.yPos + 100;
         });
+        this.setState({
+            squares: squares,
+            lastCoords: mouse
+        } as BoardState)
     }
 
-    onMove = (e: { screenX: number, screenY: number }) => {
+    onMove = (e: { clientX: number, clientY: number }) => {
         const squares: SquareProps[] = this.state.squares.slice();
-        console.log("x:" + e.screenX + " - y:" + e.screenY);
-        this.setState({ squares: squares } as BoardState);
+        const mouse: MousePosition = { X: e.clientX, Y: e.clientY };
+        //console.log("x:" + e.clientX + " - y:" + e.clientY);
+        squares.forEach(el => {
+            if (el.isActive) {
+                el.xPos += mouse.X - this.state.lastCoords.X;
+                el.yPos += mouse.Y - this.state.lastCoords.Y;
+            }
+        });
+        this.setState({ squares: squares, lastCoords: mouse } as BoardState);
     }
 
     onUp = () => {
         const squares: SquareProps[] = this.state.squares.slice();
-        this.setState({ squares: squares } as BoardState);
+        squares.forEach(el => {
+            el.isActive = false;
+        });
+        this.setState({ squares: squares, lastCoords: this.state.lastCoords } as BoardState);
     }
 
     render() {

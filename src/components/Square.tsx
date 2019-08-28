@@ -12,7 +12,7 @@ const Square: React.FC<SquareProps> = (props) => {
     return (
         <div id={props.name}
             style={{ backgroundColor: props.color }}
-            className={"square"}>
+            className={"square" + (props.isActive ? " active" : "")}>
         </div>
     )
 };
