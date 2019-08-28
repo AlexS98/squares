@@ -16,8 +16,8 @@ class Board extends React.Component<{}, BoardState>{
     state: BoardState = {
         squares: [
             {
-                xPos: 150,
-                yPos: 150,
+                xPos: 125,
+                yPos: 125,
                 name: "square1",
                 color: "red",
                 isActive: false
@@ -28,9 +28,19 @@ class Board extends React.Component<{}, BoardState>{
                 name: "square2",
                 color: "green",
                 isActive: false
+            },
+            {
+                xPos: 0,
+                yPos: 0,
+                name: "square3",
+                color: "blue",
+                isActive: false
             }
         ],
-        lastCoords: { X: 0, Y: 0 }
+        lastCoords: {
+            X: 0, 
+            Y: 0
+        }
     };
 
     setSquares = () => {
@@ -55,7 +65,10 @@ class Board extends React.Component<{}, BoardState>{
     createSquares = () => {
         let squares: any[] = [];
         this.state.squares.forEach(e => {
-            squares.push(<Square key={e.name} xPos={e.xPos} yPos={e.yPos} name={e.name} color={e.color} isActive={e.isActive} />)
+            squares.push(
+                <Square key={e.name} xPos={e.xPos} yPos={e.yPos} name={e.name}
+                    color={e.color} isActive={e.isActive} />
+            );
         });
         return squares;
     }
@@ -66,9 +79,9 @@ class Board extends React.Component<{}, BoardState>{
         squares.forEach(el => {
             el.isActive = !el.isActive &&
                 mouse.X >= el.xPos &&
-                mouse.X <= el.xPos + 100 &&
+                mouse.X <= el.xPos + 108 &&
                 mouse.Y >= el.yPos &&
-                mouse.Y <= el.yPos + 100;
+                mouse.Y <= el.yPos + 108;
         });
         this.setState({
             squares: squares,
@@ -86,7 +99,10 @@ class Board extends React.Component<{}, BoardState>{
                 el.yPos += mouse.Y - this.state.lastCoords.Y;
             }
         });
-        this.setState({ squares: squares, lastCoords: mouse } as BoardState);
+        this.setState({
+            squares: squares,
+            lastCoords: mouse
+        } as BoardState);
     }
 
     onUp = () => {
@@ -94,7 +110,10 @@ class Board extends React.Component<{}, BoardState>{
         squares.forEach(el => {
             el.isActive = false;
         });
-        this.setState({ squares: squares, lastCoords: this.state.lastCoords } as BoardState);
+        this.setState({
+            squares: squares,
+            lastCoords: this.state.lastCoords
+        } as BoardState);
     }
 
     render() {
