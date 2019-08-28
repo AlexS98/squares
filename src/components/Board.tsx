@@ -1,6 +1,6 @@
 import React from 'react';
-import Square from './Square'
-import { SquareProps } from './Square'
+import Square from './Square';
+import { SquareProps } from './Square';
 
 interface BoardState {
     squares: SquareProps[]
@@ -17,8 +17,8 @@ class Board extends React.Component<{}, BoardState>{
                 isActive: false
             },
             {
-                xPos: 350,
-                yPos: 350,
+                xPos: 250,
+                yPos: 250,
                 name: "square2",
                 color: "green",
                 isActive: false
@@ -26,10 +26,21 @@ class Board extends React.Component<{}, BoardState>{
         ]
     };
 
+    componentDidMount = () => {
+        const squares: SquareProps[] = this.state.squares.slice();
+        squares.forEach(e => {
+            const el:any = document.getElementById(e.name);
+            if (el) {
+                el.style.left = e.xPos + 'px';
+                el.style.top = e.yPos + 'px';
+            }
+        });
+    }
+
     createSquares = () => {
         let squares: any[] = [];
         this.state.squares.forEach(e => {
-            squares.push(<Square xPos={e.xPos} yPos={e.yPos} name={e.name} color={e.color} />)
+            squares.push(<Square key={e.name} xPos={e.xPos} yPos={e.yPos} name={e.name} color={e.color} />)
         });
         return squares;
     }
@@ -41,19 +52,21 @@ class Board extends React.Component<{}, BoardState>{
         });
     }
 
-    onMove = () => {
+    onMove = (e: { screenX: number, screenY: number }) => {
         const squares: SquareProps[] = this.state.squares.slice();
-        this.setState({squares: squares} as BoardState);
+        console.log("x:" + e.screenX + " - y:" + e.screenY);
+        this.setState({ squares: squares } as BoardState);
     }
 
     onUp = () => {
         const squares: SquareProps[] = this.state.squares.slice();
-        this.setState({squares: squares} as BoardState);
+        this.setState({ squares: squares } as BoardState);
     }
 
     render() {
         return (
-            <div onMouseDown={this.onDown}
+            <div className={"board"}
+                onMouseDown={this.onDown}
                 onMouseMove={this.onMove}
                 onMouseUp={this.onUp} >
                 {this.createSquares()}

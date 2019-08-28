@@ -8,9 +8,16 @@ body {
 }
 
 .square{
+  position: absolute;
   height: 100px;
   width: 100px;
   border: 4px double black ;
+}
+
+.board{  
+  height: 600px;
+  width: 800px;
+  border: 4px double red ;
 }
 
 .active{
