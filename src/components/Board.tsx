@@ -38,7 +38,7 @@ class Board extends React.Component<{}, BoardState>{
             }
         ],
         lastCoords: {
-            X: 0, 
+            X: 0,
             Y: 0
         }
     };
@@ -95,8 +95,13 @@ class Board extends React.Component<{}, BoardState>{
         //console.log("x:" + e.clientX + " - y:" + e.clientY);
         squares.forEach(el => {
             if (el.isActive) {
-                el.xPos += mouse.X - this.state.lastCoords.X;
-                el.yPos += mouse.Y - this.state.lastCoords.Y;
+                const newXPos = el.xPos + mouse.X - this.state.lastCoords.X;
+                const newYPos = el.yPos + mouse.Y - this.state.lastCoords.Y;
+                if (newXPos >= 0 && newYPos >= 0 &&
+                    newXPos + 100 <= 800 && newYPos + 100 <= 600) {
+                    el.xPos = newXPos;
+                    el.yPos = newYPos;
+                }
             }
         });
         this.setState({
